@@ -5,4 +5,4 @@ public class ImplExample implements Heartbeat {
 	public void printMsg(String date) { 
 		System.out.println("Heartbeat received at " + date);  
 	}  
-} 
+}
