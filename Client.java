@@ -17,10 +17,8 @@ private SimpleDateFormat simpleDateFormat;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
             String date = simpleDateFormat.format(new Date());
 
-            while () {
-                //print message
-                stub.printMsg(date);
-            }
+            //print message
+            stub.printMsg(date);
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString()); 
             e.printStackTrace(); 
