@@ -3,10 +3,10 @@ import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Client {
+public class Receiver {
 private static int TIME = 999999999; 
 private SimpleDateFormat simpleDateFormat;
-    private Client() {} 
+    private Receiver() {} 
     public static void main(String[] args) {
         try {  
             // Getting the registry 
@@ -16,13 +16,9 @@ private SimpleDateFormat simpleDateFormat;
             Heartbeat stub = (Heartbeat) registry.lookup("Heartbeat");
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
             String date = simpleDateFormat.format(new Date());
-
-            while () {
-                //print message
-                stub.printMsg(date);
-            }
+            stub.printMsg(date);
         } catch (Exception e) {
-            System.err.println("Client exception: " + e.toString()); 
+            System.err.println("Receiver exception: " + e.toString()); 
             e.printStackTrace(); 
         } 
     } 
