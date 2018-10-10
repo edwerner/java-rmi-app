@@ -3,10 +3,10 @@ import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Receiver {
+public class Client {
 private static int TIME = 999999999; 
 private SimpleDateFormat simpleDateFormat;
-    private Receiver() {} 
+    private Client() {} 
     public static void main(String[] args) {
         try {  
             // Getting the registry 
@@ -18,7 +18,7 @@ private SimpleDateFormat simpleDateFormat;
             String date = simpleDateFormat.format(new Date());
             stub.printMsg(date);
         } catch (Exception e) {
-            System.err.println("Receiver exception: " + e.toString()); 
+            System.err.println("Client exception: " + e.toString()); 
             e.printStackTrace(); 
         } 
     } 
