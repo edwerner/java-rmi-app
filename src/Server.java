@@ -3,12 +3,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException; 
 import java.rmi.server.UnicastRemoteObject; 
 
-public class Server extends ImplExample { 
+public class Server extends HeartbeatImpl { 
     public Server() {} 
     public static void main(String args[]) { 
     try {
             // Instantiating the implementation class 
-            ImplExample obj = new ImplExample(); 
+            HeartbeatImpl obj = new HeartbeatImpl(); 
 
             // Exporting the object of implementation class  
             // (here we are exporting the remote object to the stub) 
