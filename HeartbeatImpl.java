@@ -1,5 +1,5 @@
 // Implementing the remote interface
-public class ImplExample implements Heartbeat {
+public class HeartbeatImpl implements Heartbeat {
 
 	// Implementing the interface method 
 	public void printMsg(String date) { 
