@@ -7,7 +7,7 @@ Java RMI app
 
 **2. Compile java source files:**
 
-`Javac *.java`
+`javac *.java`
 
 **3. Start RMI service:**
 
@@ -15,11 +15,11 @@ Java RMI app
 
 **4. Start Java server:**
 
-`Java Server`
+`java Server`
 
-**5. Start Java client:**
+**5. Start Java RMI receiver:**
 
-`Java Client`
+`java Receiver`
 
  Tutorial found here:
  
