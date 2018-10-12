@@ -5,6 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 public class Receiver {
     private SimpleDateFormat simpleDateFormat;
@@ -16,7 +17,8 @@ public class Receiver {
             // Getting the registry 
             Registry registry = LocateRegistry.getRegistry(null);
             String date; 
-            int failureCounter = 5;
+            //int failureCounter = 5;
+            int failureCounter = randInt(3,5);
 
             // Looking up the registry for the remote object 
             Heartbeat heartbeat = (Heartbeat) registry.lookup("Heartbeat");
@@ -41,4 +43,10 @@ public class Receiver {
             e.printStackTrace(); 
         } 
     } 
+    
+    public static int randInt(int min, int max) {   	
+        Random rand = new Random();
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+        return randomNum;
+    }
 }
