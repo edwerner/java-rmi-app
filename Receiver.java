@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -22,23 +23,36 @@ public class Receiver {
             Heartbeat heartbeat = (Heartbeat) registry.lookup("Heartbeat");
             Heartbeat redundancy = (Heartbeat) registry.lookup("Heartbeat");
 
+            // time-date stamp
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+
+            // heartbeat is running
             running = true;
+            
+            // get Java runtime
+            Runtime rt = Runtime.getRuntime();
 
             while (running == true) {
-                if (failureCounter > 0) {
-                    date = simpleDateFormat.format(new Date());
-                    heartbeat.printMsg(date);
-                    Thread.sleep(5000);
-                    failureCounter--;
-                } else {
-                   running = false;
-                   throw new ConnectException("Heartbeat receiver has disconnected");
+              if (failureCounter > 0) {
+                 date = simpleDateFormat.format(new Date());
+                 heartbeat.printMsg(date);
+                 Thread.sleep(5000);
+                 failureCounter--;
+              } else {
+                running = false;
+                try {
+                  rt.exec("java Receiver");
+                  running = true;
+                  failureCounter = 5;
+                } catch (IOException e) {
+                  e.printStackTrace();
                 }
-            }
+                throw new ConnectException("Heartbeat receiver has disconnected");
+              }
+          }
         } catch (ConnectException e) {
             System.err.println("Client exception: " + e.toString()); 
-            e.printStackTrace(); 
+            e.printStackTrace();
         } 
     } 
 }
