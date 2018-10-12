@@ -43,12 +43,14 @@ public class Receiver {
               } else {
                 running = false;
                 try {
+                  redundancy.printMsg("Hearbeat has crashed");
                   rt.exec("java Receiver");
                   running = true;
                   failureCounter = 5;
                 } catch (IOException e) {
                   e.printStackTrace();
-                }
+                } 
+                redundancy.printMsg("Hearbeat has recovered");
                 throw new ConnectException("Heartbeat receiver has disconnected");
               }
           }
