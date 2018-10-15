@@ -43,7 +43,7 @@ public class Receiver {
             } else {
                 running = false;
                 try {
-                    redundancy.printMsg("Hearbeat has crashed");
+                    redundancy.printMsg("Hearbeat has disconnected");
                     rt.exec("java Receiver");
                     running = true;
                     failureCounter = 5;
