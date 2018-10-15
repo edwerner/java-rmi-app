@@ -46,7 +46,7 @@ public class Receiver {
                     redundancy.printMsg("Hearbeat has disconnected");
                     rt.exec("java Receiver");
                     running = true;
-                    failureCounter = 5;
+                    failureCounter = randInt(3, 5);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
