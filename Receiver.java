@@ -10,7 +10,6 @@ import java.util.Random;
 
 public class Receiver {
     private SimpleDateFormat simpleDateFormat;
-    private static boolean running;
     private Receiver() {}
 
     public static void main(String[] args) throws RemoteException, NotBoundException, InterruptedException {
@@ -28,31 +27,25 @@ public class Receiver {
         // time-date stamp
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
 
-        // heartbeat is running
-        running = true;
-
         // get Java runtime
         Runtime rt = Runtime.getRuntime();
 
-        while (running == true) {
-            if (failureCounter > 0) {
-                date = simpleDateFormat.format(new Date());
-                heartbeat.printMsg(date);
-                Thread.sleep(5000);
-                failureCounter--;
-            } else {
-                running = false;
-                try {
-                    redundancy.printMsg("Hearbeat has disconnected");
-                    rt.exec("java Receiver");
-                    running = true;
-                    failureCounter = randInt(3, 5);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                redundancy.printMsg("Hearbeat has recovered");
-                throw new ConnectException("Heartbeat receiver has disconnected");
+        if (failureCounter > 0) {
+            date = simpleDateFormat.format(new Date());
+            heartbeat.printMsg(date);
+            Thread.sleep(5000);
+            failureCounter--;
+        } else {
+            try {
+                redundancy.printMsg("Hearbeat has disconnected");
+                rt.exec("java Receiver");
+                running = true;
+                failureCounter = randInt(3, 5);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            redundancy.printMsg("Hearbeat has recovered");
+            throw new ConnectException("Heartbeat receiver has disconnected");
         }
     }
 
