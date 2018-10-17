@@ -12,12 +12,12 @@ public class Receiver {
     private SimpleDateFormat simpleDateFormat;
     private Receiver() {}
 
-    public static void main(String[] args) throws RemoteException, NotBoundException, InterruptedException {
+    public static void main(String[] args) throws NotBoundException, InterruptedException, IOException {
 
         // Getting the registry 
         Registry registry = LocateRegistry.getRegistry(null);
         String date;
-        //int failureCounter = 5;
+
         int failureCounter = randInt(3, 5);
 
         // Looking up the registry for the remote object 
@@ -29,25 +29,25 @@ public class Receiver {
 
         // get Java runtime
         Runtime rt = Runtime.getRuntime();
-
-        if (failureCounter > 0) {
-            date = simpleDateFormat.format(new Date());
-            heartbeat.printMsg(date);
-            Thread.sleep(5000);
-            failureCounter--;
-        } else {
-            try {
-                redundancy.printMsg("Hearbeat has disconnected");
-                rt.exec("java Receiver");
-                running = true;
-                failureCounter = randInt(3, 5);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            redundancy.printMsg("Hearbeat has recovered");
-            throw new ConnectException("Heartbeat receiver has disconnected");
-        }
+        try {
+        	redundancy.printMsg("Hearbeat has started");
+	        while(true) {
+			        if (failureCounter > 0) {
+			            date = simpleDateFormat.format(new Date());
+			            heartbeat.printMsg(date);
+			            Thread.sleep(5000);
+			            failureCounter--;
+			        } else {			       
+				            throw new ConnectException("Heartbeat receiver has disconnected");			          
+			            } 
+			        }
+    	}catch (Exception e) {
+    		redundancy.printMsg("Hearbeat has disconnected");
+    		rt.exec("java Receiver");
+    	}
     }
+
+ 
 
     public static int randInt(int min, int max) {
         Random rand = new Random();
