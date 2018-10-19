@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 // Implementing the remote interface
 public class HeartbeatImpl implements Heartbeat {
 
@@ -7,7 +9,11 @@ public class HeartbeatImpl implements Heartbeat {
 	public void printMsg(String date) { 
 		System.out.println("Heartbeat received at " + date);  
 	}
-	public void writeHeartbeat(String msg) {
-		fileWriter.writeHeartbeat(msg);
+	public void writeHeartbeat() {
+		try {
+			fileWriter.writeHeartbeat();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

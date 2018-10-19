@@ -18,7 +18,7 @@ public class Receiver {
         Registry registry = LocateRegistry.getRegistry(null);
         String date;
 
-        int failureCounter = randInt(3, 5);
+        int failureCounter = randInt(2, 6);
 
         // Looking up the registry for the remote object 
         Heartbeat heartbeat = (Heartbeat) registry.lookup("Heartbeat");
@@ -34,7 +34,7 @@ public class Receiver {
 	        while(true) {
 			        if (failureCounter > 0) {
 			            date = simpleDateFormat.format(new Date());
-			            heartbeat.printMsg(date);
+			            heartbeat.writeHeartbeat();
 
 			            Thread.sleep(5000);
 			            failureCounter--;
