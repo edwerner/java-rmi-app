@@ -30,11 +30,12 @@ public class Receiver {
         // get Java runtime
         Runtime rt = Runtime.getRuntime();
         try {
-        	redundancy.printMsg("Hearbeat has started");
+        	heartbeat.printMsg("Hearbeat has started");
 	        while(true) {
 			        if (failureCounter > 0) {
 			            date = simpleDateFormat.format(new Date());
 			            heartbeat.printMsg(date);
+
 			            Thread.sleep(5000);
 			            failureCounter--;
 			        } else {			       
