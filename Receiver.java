@@ -35,6 +35,7 @@ public class Receiver {
 			        if (failureCounter > 0) {
 			            date = simpleDateFormat.format(new Date());
 			            heartbeat.printMsg(date);
+
 			            Thread.sleep(5000);
 			            failureCounter--;
 			        } else {			       
