@@ -9,11 +9,13 @@ public class HeartbeatImpl implements Heartbeat {
 	public void printMsg(String date) { 
 		System.out.println("Heartbeat received at " + date);  
 	}
-	public void writeHeartbeat() {
+	public int writeHeartbeat() {
+		int output = 0;
 		try {
-			fileWriter.writeHeartbeat();
+			output = fileWriter.writeHeartbeat();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return output;
 	}
 }
