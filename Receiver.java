@@ -4,6 +4,7 @@ import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public class Receiver {
@@ -32,7 +33,8 @@ public class Receiver {
 			heartbeat.printMsg("Hearbeat has started");
 			while (true) {
 				if (failureCounter > 0) {
-					heartbeat.printMsg("Heartbeat count: " + heartbeat.writeHeartbeat() + " " + simpleDateFormat);
+					String date = simpleDateFormat.format(new Date());
+					heartbeat.printMsg("Heartbeat count: " + heartbeat.writeHeartbeat() + " " + date);
 					Thread.sleep(5000);
 					failureCounter--;
 				} else {
@@ -41,7 +43,6 @@ public class Receiver {
 			}
 		} catch (Exception e) {
 			redundancy.printMsg("Hearbeat has disconnected");
-			heartbeat.writeHeartbeat();
 			rt.exec("java Receiver");
 		}
 	}
