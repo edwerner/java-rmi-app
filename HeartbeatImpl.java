@@ -6,8 +6,8 @@ public class HeartbeatImpl implements Heartbeat {
     private HeartbeatFileWrite fileWriter = new HeartbeatFileWrite();
 
 	// Implementing the interface method 
-	public void printMsg(String date) { 
-		System.out.println("Heartbeat received at " + date);  
+	public void printMsg(String msg) { 
+		System.out.println(msg);  
 	}
 	public int writeHeartbeat() {
 		int output = 0;

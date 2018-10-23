@@ -32,9 +32,10 @@ public class Receiver {
 		try {
 			heartbeat.printMsg("Hearbeat has started");
 			while (true) {
+                // heartbeat.syncHeartbeat();
 				if (failureCounter > 0) {
 					String date = simpleDateFormat.format(new Date());
-					heartbeat.printMsg("Heartbeat count: " + heartbeat.writeHeartbeat() + " " + date);
+					heartbeat.printMsg("Heartbeat received at " + date + " count: " + heartbeat.writeHeartbeat());
 					Thread.sleep(5000);
 					failureCounter--;
 				} else {

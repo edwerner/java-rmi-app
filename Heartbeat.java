@@ -6,4 +6,5 @@ import java.rmi.RemoteException;
 public interface Heartbeat extends Remote {  
 	void printMsg(String date) throws RemoteException;  
 	int writeHeartbeat() throws IOException;
+	// void syncHeartbeats();
 } 
