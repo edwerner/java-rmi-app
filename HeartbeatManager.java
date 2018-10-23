@@ -1,10 +1,10 @@
 import java.io.*;
 
-public class HeartbeatFileWrite {
+public class HeartbeatManager {
 	private static final String FILE_NAME = "data.txt";
 
 	public int writeHeartbeat() throws IOException {
-		String heartbeatCounter = getValue().toString();
+		String heartbeatCounter = getHeartbeatValue().toString();
 		int heartbeatInt = Integer.parseInt(heartbeatCounter);
 		heartbeatInt++;
 		BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME));
@@ -13,7 +13,7 @@ public class HeartbeatFileWrite {
 		return heartbeatInt;
 	}
 
-	public String getValue() throws FileNotFoundException {
+	public String getHeartbeatValue() throws FileNotFoundException {
 		File file = new File(FILE_NAME);
 		@SuppressWarnings("resource")
 		BufferedReader br = new BufferedReader(new FileReader(file));

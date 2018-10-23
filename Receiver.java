@@ -5,14 +5,16 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Receiver {
 	@SuppressWarnings("unused")
 	private SimpleDateFormat simpleDateFormat;
+	private static Map<String, Heartbeat> heartbeatList = new HashMap<String, Heartbeat>();
 
-	private Receiver() {
-	}
+	private Receiver() {}
 
 	public static void main(String[] args) throws NotBoundException, InterruptedException, IOException {
 
@@ -22,7 +24,7 @@ public class Receiver {
 
 		// Looking up the registry for the remote object
 		Heartbeat heartbeat = (Heartbeat) registry.lookup("Heartbeat");
-		Heartbeat redundancy = (Heartbeat) registry.lookup("Heartbeat");
+		Heartbeat redundantHeartbeat = (Heartbeat) registry.lookup("Heartbeat");
 
 		// time-date stamp
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
@@ -32,10 +34,10 @@ public class Receiver {
 		try {
 			heartbeat.printMsg("Hearbeat has started");
 			while (true) {
-                // heartbeat.syncHeartbeat();
+				heartbeatList = heartbeat.syncHeartbeat(heartbeat, redundantHeartbeat);
 				if (failureCounter > 0) {
 					String date = simpleDateFormat.format(new Date());
-					heartbeat.printMsg("Heartbeat received at " + date + " count: " + heartbeat.writeHeartbeat());
+					heartbeatList.get("heartbeat").printMsg("Heartbeat received at " + date + " count: " + heartbeat.writeHeartbeat());
 					Thread.sleep(5000);
 					failureCounter--;
 				} else {
@@ -43,7 +45,8 @@ public class Receiver {
 				}
 			}
 		} catch (Exception e) {
-			redundancy.printMsg("Hearbeat has disconnected");
+			int redundantCount = Integer.valueOf(redundantHeartbeat.getCount()) + 1;
+			heartbeatList.get("redundancy").printMsg("Hearbeat has disconnected at count: " + redundantCount);
 			rt.exec("java Receiver");
 		}
 	}
