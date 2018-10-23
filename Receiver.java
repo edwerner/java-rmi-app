@@ -38,7 +38,7 @@ public class Receiver {
 				if (failureCounter > 0) {
 					String date = simpleDateFormat.format(new Date());
 					heartbeatList.get("heartbeat").printMsg("Heartbeat received at " + date + " count: " + heartbeat.writeHeartbeat());
-					Thread.sleep(5000);
+					Thread.sleep(2500);
 					failureCounter--;
 				} else {
 					throw new ConnectException("Heartbeat receiver has disconnected");
