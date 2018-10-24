@@ -10,11 +10,23 @@ public class HeartbeatImpl implements Heartbeat {
     private HeartbeatManager manager = new HeartbeatManager();
     @SuppressWarnings("unused")
 	private String count;
-
+    private Map<String, Heartbeat> heartbeatMap;
+    
+    public HeartbeatImpl() {
+    	 heartbeatMap = new HashMap<String, Heartbeat>();
+    }
+    /**
+     * Print heartbeat message
+     */
     @Override
 	public void printMsg(String msg) { 
 		System.out.println(msg);  
 	}
+    
+    /**
+     * Write heartbeat to file
+     * @return heartbeat count value
+     */
 	@Override
 	public int writeHeartbeat() {
 		int output = 0;
@@ -40,7 +52,6 @@ public class HeartbeatImpl implements Heartbeat {
 		this.count = count;
 	}
 	public Map<String, Heartbeat> syncHeartbeat(Heartbeat heartbeat, Heartbeat redundancy) {
-		Map<String, Heartbeat> heartbeatMap = new HashMap<String, Heartbeat>();
 		try {
 			heartbeat.setCount(getCount());
 			redundancy.setCount(getCount());

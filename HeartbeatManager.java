@@ -3,6 +3,11 @@ import java.io.*;
 public class HeartbeatManager {
 	private static final String FILE_NAME = "data.txt";
 
+	/**
+	 * Increment and write heartbeat to file
+	 * @return heartbeat count
+	 * @throws IOException
+	 */
 	public int writeHeartbeat() throws IOException {
 		String heartbeatCounter = getHeartbeatValue().toString();
 		int heartbeatInt = Integer.parseInt(heartbeatCounter);
@@ -12,7 +17,12 @@ public class HeartbeatManager {
 		writer.close();
 		return heartbeatInt;
 	}
-
+	
+	/**
+	 * Read heartbeat count from file
+	 * @return heartbeat value
+	 * @throws FileNotFoundException
+	 */
 	public String getHeartbeatValue() throws FileNotFoundException {
 		File file = new File(FILE_NAME);
 		@SuppressWarnings("resource")
