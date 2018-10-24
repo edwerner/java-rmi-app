@@ -12,7 +12,7 @@ import java.util.Random;
 public class Receiver {
 	@SuppressWarnings("unused")
 	private SimpleDateFormat simpleDateFormat;
-	private static Map<String, Heartbeat> heartbeatList = new HashMap<String, Heartbeat>();
+	private static Map<String, Heartbeat> heartbeatMap = new HashMap<String, Heartbeat>();
 
 	private Receiver() {}
 
@@ -36,12 +36,12 @@ public class Receiver {
 			while (true) {
 				
 				// sync heartbeat and redundancy
-				heartbeatList = heartbeat.syncHeartbeat(heartbeat, redundantHeartbeat);
+				heartbeatMap = heartbeat.syncHeartbeat(heartbeat, redundantHeartbeat);
 				if (failureCounter > 0) {
 					String date = simpleDateFormat.format(new Date());
 					
 					// print heartbeat message
-					heartbeatList.get("heartbeat").printMsg("Heartbeat received at " + date + " count: " + heartbeat.logHeartbeat());
+					heartbeatMap.get("heartbeat").printMsg("Heartbeat received at " + date + " count: " + heartbeat.logHeartbeat());
 					
 					// Suspend thread for 2.5 seconds
 					Thread.sleep(2500);
@@ -58,7 +58,7 @@ public class Receiver {
 			int redundantCount = Integer.valueOf(redundantHeartbeat.getCount()) + 1;
 			
 			// print redundant heartbeat message
-			heartbeatList.get("redundancy").printMsg("Hearbeat has disconnected at count: " + redundantCount);
+			heartbeatMap.get("redundancy").printMsg("Hearbeat has disconnected at count: " + redundantCount);
 			
 			// invoke exec process to restart receiver with
 			// Java runtime
