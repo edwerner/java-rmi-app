@@ -6,7 +6,7 @@ import java.util.Map;
 // Remote interface for our application
 public interface Heartbeat extends Remote {  
 	void printMsg(String date) throws RemoteException;  
-	int writeHeartbeat() throws IOException;
+	int logHeartbeat() throws IOException;
 	String getCount() throws RemoteException;
 	void setCount(String string) throws RemoteException;
 	Map<String, Heartbeat> syncHeartbeat(Heartbeat heartbeat, Heartbeat redundancy) throws RemoteException;

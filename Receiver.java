@@ -41,7 +41,7 @@ public class Receiver {
 					String date = simpleDateFormat.format(new Date());
 					
 					// print heartbeat message
-					heartbeatList.get("heartbeat").printMsg("Heartbeat received at " + date + " count: " + heartbeat.writeHeartbeat());
+					heartbeatList.get("heartbeat").printMsg("Heartbeat received at " + date + " count: " + heartbeat.logHeartbeat());
 					
 					// Suspend thread for 2.5 seconds
 					Thread.sleep(2500);

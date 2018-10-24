@@ -31,7 +31,7 @@ public class HeartbeatImpl implements Heartbeat {
      * @return heartbeat count value
      */
 	@Override
-	public int writeHeartbeat() {
+	public int logHeartbeat() {
 		int output = 0;
 		try {
 			output = manager.writeHeartbeat();
