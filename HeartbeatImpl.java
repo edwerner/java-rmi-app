@@ -7,7 +7,7 @@ import java.util.Map;
 // Implementing the remote interface
 public class HeartbeatImpl implements Heartbeat {
 
-    private HeartbeatIOManager manager = new HeartbeatIOManager();
+    private HeartbeatIoImpl manager = new HeartbeatIoImpl();
     @SuppressWarnings("unused")
 	private String count;
     private Map<String, Heartbeat> heartbeatMap;

@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class HeartbeatIOManager {
+public class HeartbeatIoImpl implements HeartbeatIo {
 	private static final String FILE_NAME = "data.txt";
 
 	/**
@@ -8,6 +8,7 @@ public class HeartbeatIOManager {
 	 * @return heartbeat count
 	 * @throws IOException
 	 */
+	@Override
 	public int writeHeartbeat() throws IOException {
 		String heartbeatCounter = getHeartbeatValue().toString();
 		int heartbeatInt = Integer.parseInt(heartbeatCounter);
@@ -23,6 +24,7 @@ public class HeartbeatIOManager {
 	 * @return heartbeat value
 	 * @throws FileNotFoundException
 	 */
+	@Override
 	public String getHeartbeatValue() throws FileNotFoundException {
 		File file = new File(FILE_NAME);
 		@SuppressWarnings("resource")
