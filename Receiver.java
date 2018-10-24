@@ -34,6 +34,8 @@ public class Receiver {
 		try {
 			heartbeat.printMsg("Hearbeat has started");
 			while (true) {
+				
+				// sync heartbeat and redundancy
 				heartbeatList = heartbeat.syncHeartbeat(heartbeat, redundantHeartbeat);
 				if (failureCounter > 0) {
 					String date = simpleDateFormat.format(new Date());
@@ -41,10 +43,14 @@ public class Receiver {
 					Thread.sleep(2500);
 					failureCounter--;
 				} else {
+					// throw exception when failure
+					// counter reaches zero
 					throw new ConnectException("Heartbeat receiver has disconnected");
 				}
 			}
 		} catch (Exception e) {
+			
+			// create heartbeat counter lookahead for missed count
 			int redundantCount = Integer.valueOf(redundantHeartbeat.getCount()) + 1;
 			heartbeatList.get("redundancy").printMsg("Hearbeat has disconnected at count: " + redundantCount);
 			rt.exec("java Receiver");

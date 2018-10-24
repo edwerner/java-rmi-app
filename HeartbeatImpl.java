@@ -11,7 +11,10 @@ public class HeartbeatImpl implements Heartbeat {
     @SuppressWarnings("unused")
 	private String count;
     private Map<String, Heartbeat> heartbeatMap;
-    
+
+    /**
+     * Instantiate heartbeat map
+     */
     public HeartbeatImpl() {
     	 heartbeatMap = new HashMap<String, Heartbeat>();
     }
