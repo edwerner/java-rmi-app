@@ -54,6 +54,7 @@ public class HeartbeatImpl implements Heartbeat {
 	public void setCount(String count) {
 		this.count = count;
 	}
+	@Override
 	public Map<String, Heartbeat> syncHeartbeat(Heartbeat heartbeat, Heartbeat redundancy) {
 		try {
 			heartbeat.setCount(getCount());
