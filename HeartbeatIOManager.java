@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class HeartbeatManager {
+public class HeartbeatIOManager {
 	private static final String FILE_NAME = "data.txt";
 
 	/**
