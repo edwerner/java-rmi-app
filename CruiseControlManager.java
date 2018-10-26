@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;

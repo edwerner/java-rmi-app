@@ -23,14 +23,23 @@ public class CruiseControlImpl implements CruiseControl {
 	public void printMsg(String msg) { 
 		System.out.println(msg);  
 	}
+    /**
+     * Print get heartbeat count
+     */
 	@Override
 	public int getCount() {
 		return this.count;
 	}
+    /**
+     * Set heartbeat count
+     */
 	@Override
 	public void setCount(int count) {
 		this.count = count;
 	}
+	/**
+	 * Synchronize heartbeats
+	 */
 	@Override
 	public Map<String, CruiseControl> syncHeartbeat(CruiseControl heartbeat, CruiseControl redundancy) {
 		try {
@@ -43,10 +52,16 @@ public class CruiseControlImpl implements CruiseControl {
 		heartbeatMap.put("redundancy", redundancy);
 		return heartbeatMap;
 	}
+	/**
+	 * Get current speed
+	 */
 	@Override
 	public int getSpeed() throws RemoteException {
 		return speed;
 	}
+	/**
+	 * Set current speed
+	 */
 	@Override
 	public void setSpeed(int speed) throws RemoteException {
 		this.speed = speed;
