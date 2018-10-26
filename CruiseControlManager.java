@@ -22,8 +22,7 @@ public class CruiseControlManager {
 	private static Registry registry;
 	private static int heartbeatCount;
 
-	private CruiseControlManager() {
-	}
+	private CruiseControlManager() {}
 
 	public static void main(String[] args) throws RemoteException, AlreadyBoundException, NotBoundException {
 
