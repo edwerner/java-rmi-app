@@ -1,8 +1,10 @@
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,10 +18,22 @@ public class CruiseControlManager {
 
 	private CruiseControlManager() {}
 
-	public static void main(String[] args) throws NotBoundException, InterruptedException, IOException {
+	public static void main(String[] args) throws NotBoundException, InterruptedException, IOException, AlreadyBoundException {
 
+		Receiver receiver = new Receiver();
+
+        // Instantiating the implementation class 
+        CruiseControlImpl obj = new CruiseControlImpl(); 
+
+        // Exporting the object of implementation class  
+        // (here we are exporting the remote object to the stub) 
+        Heartbeat stub = (Heartbeat) UnicastRemoteObject.exportObject(obj, 0);
+        
+        // Binding the remote object (stub) in the registry 
+        Registry registry = LocateRegistry.getRegistry();
+        registry.bind("Heartbeat", stub);
+        
 		// Getting the registry
-		Registry registry = LocateRegistry.getRegistry(null);
 		int failureCounter = randInt(2, 6);
 
 		// Looking up the registry for the remote object
@@ -30,7 +44,10 @@ public class CruiseControlManager {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
 
 		// get Java runtime
-		Runtime rt = Runtime.getRuntime();
+//		Runtime rt = Runtime.getRuntime();
+
+        System.out.println("Server ready");
+        
 		try {
 			heartbeat.printMsg("Hearbeat has started");
 			while (true) {
@@ -62,7 +79,7 @@ public class CruiseControlManager {
 			
 			// invoke exec process to restart receiver with
 			// Java runtime
-			rt.exec("java Receiver");
+//			rt.exec("java Receiver");
 		}
 	}
 

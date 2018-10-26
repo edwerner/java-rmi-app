@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Implementing the remote interface
-public class HeartbeatImpl implements Heartbeat {
+public class CruiseControlImpl implements Heartbeat {
 
     private HeartbeatIoImpl manager = new HeartbeatIoImpl();
     @SuppressWarnings("unused")
@@ -15,7 +15,7 @@ public class HeartbeatImpl implements Heartbeat {
     /**
      * Instantiate heartbeat map
      */
-    public HeartbeatImpl() {
+    public CruiseControlImpl() {
     	 heartbeatMap = new HashMap<String, Heartbeat>();
     }
     /**
