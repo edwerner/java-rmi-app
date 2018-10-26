@@ -1,22 +1,20 @@
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
 // Implementing the remote interface
-public class CruiseControlImpl implements Heartbeat {
+public class CruiseControlImpl implements CruiseControl {
 
-    private HeartbeatIoImpl manager = new HeartbeatIoImpl();
     @SuppressWarnings("unused")
-	private String count;
-    private Map<String, Heartbeat> heartbeatMap;
+    private Map<String, CruiseControl> heartbeatMap;
+	private int count;
+	private int speed;
 
     /**
      * Instantiate heartbeat map
      */
     public CruiseControlImpl() {
-    	 heartbeatMap = new HashMap<String, Heartbeat>();
+    	 heartbeatMap = new HashMap<String, CruiseControl>();
     }
     /**
      * Print heartbeat message
@@ -25,37 +23,16 @@ public class CruiseControlImpl implements Heartbeat {
 	public void printMsg(String msg) { 
 		System.out.println(msg);  
 	}
-    
-    /**
-     * Write heartbeat to file
-     * @return heartbeat count value
-     */
 	@Override
-	public int logHeartbeat() {
-		int output = 0;
-		try {
-			output = manager.writeHeartbeat();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return output;
+	public int getCount() {
+		return this.count;
 	}
 	@Override
-	public String getCount() {
-		String value = "Error retrieving heartbeat value";
-		try {
-			value = manager.getHeartbeatValue().toString();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return value;
-	}
-	@Override
-	public void setCount(String count) {
+	public void setCount(int count) {
 		this.count = count;
 	}
 	@Override
-	public Map<String, Heartbeat> syncHeartbeat(Heartbeat heartbeat, Heartbeat redundancy) {
+	public Map<String, CruiseControl> syncHeartbeat(CruiseControl heartbeat, CruiseControl redundancy) {
 		try {
 			heartbeat.setCount(getCount());
 			redundancy.setCount(getCount());
@@ -65,5 +42,13 @@ public class CruiseControlImpl implements Heartbeat {
 		heartbeatMap.put("heartbeat", heartbeat);
 		heartbeatMap.put("redundancy", redundancy);
 		return heartbeatMap;
+	}
+	@Override
+	public int getSpeed() throws RemoteException {
+		return speed;
+	}
+	@Override
+	public void setSpeed(int speed) throws RemoteException {
+		this.speed = speed;
 	}
 }

@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,54 +15,66 @@ import java.util.Random;
 public class CruiseControlManager {
 	@SuppressWarnings("unused")
 	private SimpleDateFormat simpleDateFormat;
-	private static Map<String, Heartbeat> heartbeatMap = new HashMap<String, Heartbeat>();
+	private static Map<String, CruiseControl> heartbeatMap = new HashMap<String, CruiseControl>();
+	private static CruiseControl heartbeat;
+	private static CruiseControl redundantHeartbeat;
+	private static int failureCounter;
+	private static CruiseControl stub;
+	private static Registry registry;
+	private static int heartbeatCount;
 
-	private CruiseControlManager() {}
+	private CruiseControlManager() {
+	}
 
-	public static void main(String[] args) throws NotBoundException, InterruptedException, IOException, AlreadyBoundException {
+	public static void main(String[] args) throws RemoteException, AlreadyBoundException, NotBoundException {
 
-		Receiver receiver = new Receiver();
+		// Instantiating the implementation class
+		CruiseControlImpl obj = new CruiseControlImpl();
 
-        // Instantiating the implementation class 
-        CruiseControlImpl obj = new CruiseControlImpl(); 
+		// Exporting the object of implementation class
+		// (here we are exporting the remote object to the stub)
+		stub = (CruiseControl) UnicastRemoteObject.exportObject(obj, 0);
 
-        // Exporting the object of implementation class  
-        // (here we are exporting the remote object to the stub) 
-        Heartbeat stub = (Heartbeat) UnicastRemoteObject.exportObject(obj, 0);
-        
-        // Binding the remote object (stub) in the registry 
-        Registry registry = LocateRegistry.getRegistry();
-        registry.bind("Heartbeat", stub);
-        
-		// Getting the registry
-		int failureCounter = randInt(2, 6);
+		// Binding the remote object (stub) in the registry
+		registry = LocateRegistry.getRegistry();
+		registry.bind("Heartbeat", stub);
 
 		// Looking up the registry for the remote object
-		Heartbeat heartbeat = (Heartbeat) registry.lookup("Heartbeat");
-		Heartbeat redundantHeartbeat = (Heartbeat) registry.lookup("Heartbeat");
+		heartbeat = (CruiseControl) registry.lookup("Heartbeat");
+		redundantHeartbeat = (CruiseControl) registry.lookup("Heartbeat");
+		
+		// initialize heartbeat count
+		heartbeatCount = 0;
+		
+		initialize();
 
-		// time-date stamp
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
-
-		// get Java runtime
-//		Runtime rt = Runtime.getRuntime();
-
-        System.out.println("Server ready");
-        
+		System.out.println("Cruise control manager ready");
+	}
+	
+	public static void initialize() throws RemoteException, AlreadyBoundException, NotBoundException {
 		try {
+			// Getting the registry
+			failureCounter = randInt(2, 6);
+
+			// time-date stamp
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+			
 			heartbeat.printMsg("Hearbeat has started");
 			while (true) {
-				
+
 				// sync heartbeat and redundancy
 				heartbeatMap = heartbeat.syncHeartbeat(heartbeat, redundantHeartbeat);
 				if (failureCounter > 0) {
+					
+					heartbeat.setCount(heartbeatCount++);
 					String date = simpleDateFormat.format(new Date());
-					
+
 					// print heartbeat message
-					heartbeatMap.get("heartbeat").printMsg("Heartbeat received at " + date + " count: " + heartbeat.logHeartbeat());
-					
+					heartbeatMap.get("heartbeat")
+							.printMsg("Heartbeat received at " + date + " count: " + heartbeat.getCount());
+
 					// Suspend thread for 2.5 seconds
-					Thread.sleep(2500);
+					Thread.sleep(500);
 					failureCounter--;
 				} else {
 					// throw exception when failure
@@ -70,21 +83,23 @@ public class CruiseControlManager {
 				}
 			}
 		} catch (Exception e) {
-			
 			// create heartbeat counter lookahead for missed count
-			int redundantCount = Integer.valueOf(redundantHeartbeat.getCount()) + 1;
-			
+			int redundantCount = Integer.valueOf(redundantHeartbeat.getCount());
+
 			// print redundant heartbeat message
 			heartbeatMap.get("redundancy").printMsg("Hearbeat has disconnected at count: " + redundantCount);
 			
-			// invoke exec process to restart receiver with
-			// Java runtime
-//			rt.exec("java Receiver");
+			// rebind failed heartbeat
+			registry.rebind("heartbeat", stub);
+			
+			// re-initialize heartbeat
+			initialize();
 		}
 	}
 
 	/**
 	 * Calculate random number within bounds
+	 * 
 	 * @param min
 	 * @param max
 	 * @return random integer
