@@ -18,9 +18,11 @@ public class CruiseControlManager {
 	private static CruiseControl heartbeat;
 	private static CruiseControl redundantHeartbeat;
 	private static int failureCounter;
+	private static int changeSpeedCounter;
 	private static CruiseControl stub;
 	private static Registry registry;
 	private static int heartbeatCount;
+	private static int speed = 50;
 
 	private CruiseControlManager() {}
 
@@ -53,23 +55,39 @@ public class CruiseControlManager {
 		try {
 			// Getting the registry
 			failureCounter = randInt(2, 6);
+			// determine when to change Cruise Control Speed
+			changeSpeedCounter = randInt(2,3);
 
 			// time-date stamp
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
 			
-			heartbeat.printMsg("Hearbeat has started");
+			heartbeat.printMsg("Cruise Control has started");
 			while (true) {
 
+				// change speed +/- 5 randomly when changeSpeedCounter < 0. 20<=speed<=70.
+				if(changeSpeedCounter < 0) {
+					int speedChange = randInt(0,1);
+					if((speedChange == 1 && speed < 70) || speed <= 20) {
+						speed +=5;
+					} else if(speed>20){
+						speed -=5;
+					} 
+					//update heartbeat speed with new Cruise Control Speed
+					heartbeatMap.get("heartbeat").setSpeed(speed);
+					heartbeatMap.get("heartbeat").printMsg("Cruise Control Speed changed to " + speed);
+				}
+				changeSpeedCounter--;
+				
 				// sync heartbeat and redundancy
 				heartbeatMap = heartbeat.syncHeartbeat(heartbeat, redundantHeartbeat);
 				if (failureCounter > 0) {
 					
-					heartbeat.setCount(heartbeatCount++);
+					heartbeat.setSpeed(speed);
 					String date = simpleDateFormat.format(new Date());
 
 					// print heartbeat message
 					heartbeatMap.get("heartbeat")
-							.printMsg("Heartbeat received at " + date + " count: " + heartbeat.getCount());
+							.printMsg("Cruise Control Speed received at " + date + " speed: " + heartbeat.getSpeed());
 
 					// Suspend thread for 2.5 seconds
 					Thread.sleep(500);
@@ -77,15 +95,15 @@ public class CruiseControlManager {
 				} else {
 					// throw exception when failure
 					// counter reaches zero
-					throw new ConnectException("Heartbeat receiver has disconnected");
+					throw new ConnectException("Cruise Control receiver has disconnected");
 				}
 			}
 		} catch (Exception e) {
 			// create heartbeat counter lookahead for missed count
-			int redundantCount = Integer.valueOf(redundantHeartbeat.getCount());
+			int redundantCount = Integer.valueOf(redundantHeartbeat.getSpeed());
 
 			// print redundant heartbeat message
-			heartbeatMap.get("redundancy").printMsg("Hearbeat has disconnected at count: " + redundantCount);
+			heartbeatMap.get("redundancy").printMsg("Cruise Control has disconnected at speed: " + redundantCount);
 			
 			// rebind failed heartbeat
 			registry.rebind("heartbeat", stub);
