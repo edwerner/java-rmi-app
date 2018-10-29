@@ -7,19 +7,15 @@ Java RMI app
 
 **2. Compile java source files:**
 
-`Javac *.java`
+`javac *.java`
 
 **3. Start RMI service:**
 
 `start rmiregistry`
 
-**4. Start Java server:**
+**4. Start cruise control manager:**
 
-`Java Server`
-
-**5. Start Java client:**
-
-`Java Client`
+`java CruiseControlManager`
 
  Tutorial found here:
  
