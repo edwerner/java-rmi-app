@@ -89,8 +89,8 @@ public class CruiseControlManager {
 					heartbeatMap.get("heartbeat")
 							.printMsg("Cruise Control Speed received at " + date + " speed: " + heartbeat.getSpeed());
 
-					// Suspend thread for 2.5 seconds
-					Thread.sleep(500);
+					// Suspend thread
+					Thread.sleep(2500);
 					failureCounter--;
 				} else {
 					// throw exception when failure
