@@ -11,7 +11,9 @@ Java RMI app
 
 **3. Start RMI service:**
 
-`start rmiregistry`
+(PC) `start rmiregistry`
+
+(Mac/Linux) `rmiregistry &`
 
 **4. Start cruise control manager:**
 
