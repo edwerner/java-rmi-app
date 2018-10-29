@@ -21,7 +21,6 @@ public class CruiseControlManager {
 	private static int changeSpeedCounter;
 	private static CruiseControl stub;
 	private static Registry registry;
-	private static int heartbeatCount;
 	private static int speed = 50;
 
 	private CruiseControlManager() {}
@@ -42,9 +41,6 @@ public class CruiseControlManager {
 		// Looking up the registry for the remote object
 		heartbeat = (CruiseControl) registry.lookup("Heartbeat");
 		redundantHeartbeat = (CruiseControl) registry.lookup("Heartbeat");
-		
-		// initialize heartbeat count
-		heartbeatCount = 0;
 		
 		initialize();
 

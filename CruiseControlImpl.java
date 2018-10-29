@@ -7,7 +7,6 @@ public class CruiseControlImpl implements CruiseControl {
 
     @SuppressWarnings("unused")
     private Map<String, CruiseControl> heartbeatMap;
-	private int count;
 	private int speed;
 
     /**
